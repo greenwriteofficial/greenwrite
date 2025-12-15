@@ -880,6 +880,87 @@
         gap: 2.5rem;
       }
     }
+    /* ================================
+   Mobile Floating Products Button
+   ================================ */
+
+.mobile-products-btn {
+  display: none; /* hidden by default */
+
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  transform: translateX(-50%) translateY(16px);
+  z-index: 9999;
+
+  height: 52px;
+  padding: 0 22px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background: linear-gradient(135deg, #00c97b, #00a86b);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.2px;
+
+  border-radius: 999px;
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.18),
+    0 2px 6px rgba(0, 0, 0, 0.12);
+
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+/* Icon */
+.mobile-products-btn .mpb-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* Tap / hover micro-interaction */
+.mobile-products-btn:active {
+  transform: translateX(-50%) scale(0.96);
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* Subtle entrance animation */
+@keyframes mpb-float-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ================================
+   Mobile-only visibility
+   ================================ */
+@media (max-width: 768px) {
+  .mobile-products-btn {
+    display: flex;
+    animation: mpb-float-in 0.4s ease forwards;
+  }
+}
+
+/* Desktop / tablet safety */
+@media (min-width: 769px) {
+  .mobile-products-btn {
+    display: none !important;
+  }
+}
   </style>
 </head>
 <body>
@@ -1272,8 +1353,33 @@
   <span class="mpb-icon">🛍️</span>
   <span class="mpb-text">Products</span>
 </a>
+  <script>
+(function () {
+  if (window.innerWidth > 768) return;
+
+  const btn = document.querySelector(".mobile-products-btn");
+  if (!btn) return;
+
+  let lastScrollY = window.scrollY;
+
+  window.addEventListener("scroll", () => {
+    const currentY = window.scrollY;
+
+    if (currentY > lastScrollY + 8) {
+      // scrolling down
+      btn.style.transform = "translateX(-50%) translateY(90px)";
+    } else {
+      // scrolling up
+      btn.style.transform = "translateX(-50%) translateY(0)";
+    }
+
+    lastScrollY = currentY;
+  }, { passive: true });
+})();
+</script>
 </body>
 </html>
+
 
 
 
